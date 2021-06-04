@@ -4,6 +4,7 @@ import time
 import pickle
 from datetime import datetime
 import os
+import hmac
 
 KEYS={}
 
@@ -53,6 +54,7 @@ def reqKEY():
             date_now = datetime.now().date().strftime("%Y-%m-%d")
             saveKEY(date_now, key_now)
             break
+
 def sendKEY():
     r = requests.post(Server_ADDR, data=KEYS)
     print(r.text)

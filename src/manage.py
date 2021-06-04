@@ -6,11 +6,13 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import secrets
+import hmac
 
 # def genKEY():
-
+    # secrets.token_bytes(8)
 # def computeIDs():
-
+    # hmac.new(b,msg="2021-06-04-34".encode(),digestmod='SHA256').hexdigest()
 # def sendIDs():
 
 
