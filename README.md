@@ -6,7 +6,7 @@
 - local 端只需要存 14 天的 key，如果 server 端想要用 key mapping client，則需要太大量的記憶體。
 - Routine:
     - client 每天向一個獨立的 server 拿 $k_i$
-    - client 連上 AP 後，將自己的 $ID_{ij}$ 繳給 AP，AP 確認沒問題後回傳目前紀錄過的 $ID$ 給 client.
+    - client 連上 AP 後，將自己的 <img src="https://render.githubusercontent.com/render/math?math=ID_{ij}"> 繳給 AP，AP 確認沒問題後回傳目前紀錄過的 $ID$ 給 client.
 - 若有 client 確診，即可上繳他 14 天內擁有的 key，供每個 client check 是否有接觸。
 
 - MAC function
