@@ -10,6 +10,8 @@ import secrets
 import hmac
 from datetime import datetime
 
+ID_FILE_PREFIX="./ID_FILES/"
+
 def genKEY():
     # bytes to hex string
     return secrets.token_bytes(8).hex()
@@ -30,12 +32,20 @@ class S(BaseHTTPRequestHandler):
     def do_GET(self):
         logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
         self._set_response()
+        print(self.path[8:])
         if self.path == "/getkey":
             KEY = genKEY()
             self.wfile.write("KEY={}\n".format(KEY).encode('utf-8'))
             self.wfile.write("Have a nice day\n".encode('utf-8'))
-        elif self.path == "/checkid":
-            self.wfile.write("checking ...\n".encode('utf-8'))
+        elif self.path[:8] == "/checkid":
+            try:
+                with open(ID_FILE_PREFIX+self.path[8:], "r") as f:
+                    for i in f.readlines():
+                        self.wfile.write(i.encode('utf-8'))
+            except FileNotFoundError:
+                self.wfile.write("NO SUCH PATH".encode('utf-8'))
+        else :
+            self.wfile.write("Wear mask!!\n".encode('utf-8'))
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
@@ -46,9 +56,10 @@ class S(BaseHTTPRequestHandler):
         for i in key_list:
             date_ = i.split("=")[0]
             key_ = i.split("=")[1]
-            for j in range(0, 24):
-                print(computeIDs(bytes.fromhex(key_), date_+"-"+str(j)))
-
+            with open(ID_FILE_PREFIX+date_, "a") as f:
+                for j in range(0, 24):
+                    f.write(computeIDs(bytes.fromhex(key_), date_+"-"+str(j))+"\n")
+                    print(computeIDs(bytes.fromhex(key_), date_+"-"+str(j)))
 
         self._set_response()
         self.wfile.write("Hope you get well soon!!".encode('utf-8'))

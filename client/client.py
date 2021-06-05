@@ -10,6 +10,7 @@ KEYS={}
 
 ''' File Path '''
 KEY_FILE_PATH="./KEY_FILE"
+ID_FILE_PREFIX="./ID_FILES/"
 
 ''' Server Information'''
 Server_IP="127.0.0.1"
@@ -51,7 +52,6 @@ def saveKEY(date_now, key_now):
 def reqKEY():
     while True:
         r = requests.get(Server_ADDR+"/getkey")
-        newKEY=""
         if r.status_code == requests.codes.ok:
             print(r.text)
             key_now=r.text.split()[0][4:]
@@ -60,9 +60,30 @@ def reqKEY():
             break
 
 def sendKEY():
-    r = requests.post(Server_ADDR, data=KEYS)
-    print(r.text)
-# def checkID():
+    while True:
+        r = requests.post(Server_ADDR, data=KEYS)
+        if r.status_code == requests.codes.ok:
+            print(r.text)
+            break
+
+def checkID():
+    for i in os.listdir(ID_FILE_PREFIX):
+        r = requests.get(Server_ADDR+"/checkid/"+i)
+        print("pre")
+        if r.status_code == requests.codes.ok:
+            print("text", r.text)
+            if r.text[:1] == "NO":
+                continue
+            else :
+                positive_ID_list = r.text.split("\n")
+                with open(ID_FILE_PREFIX+i, "r") as f:
+                    local_ID_list = f.readlines()
+                    for pid in positive_ID_list:
+                        for lid in local_ID_list:
+                            if pid == lid[:-1]:
+                                return True
+    return False
+
 
 ''' communicate with AP server '''
 # def sendID():
@@ -72,10 +93,11 @@ def sendKEY():
 # def saveID():
 
 
-reqKEY()
+# reqKEY()
 # for key in KEYS:
 #     print("my ID is ", computeID(bytes.fromhex(KEYS[key]), key))
-sendKEY()
+# sendKEY()
+print(checkID())
 # r = requests.post("http://bugs.python.org", data={'number': 12524, 'type': 'issue', 'action': 'show'})
 # print(r.status_code, r.reason)
 # print(r.text[:300] + '...')
