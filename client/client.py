@@ -17,6 +17,10 @@ Server_PORT=8080
 Server_ADDR="http://{}:{}".format(Server_IP, str(Server_PORT))
 # print(Server_ADDR)
 
+
+def computeID(key_for_ID, msg_for_ID):
+    return hmac.new(key_for_ID,msg=msg_for_ID.encode(),digestmod='SHA256').hexdigest()
+
 ''' save KEY or ID '''
 def saveKEY(date_now, key_now):
     global KEYS
@@ -36,7 +40,7 @@ def saveKEY(date_now, key_now):
     # remove keys if 14 days have passed
     for key_ in KEYS:
         d = key_.split('-')
-        interval = datetime.now() - datetime(d[0], d[1], d[2])
+        interval = datetime.now() - datetime(int(d[0]), int(d[1]), int(d[2]))
         if interval.days > 14:
             del KEYS[key_]
     # save the key dictionary
@@ -61,7 +65,6 @@ def sendKEY():
 # def checkID():
 
 ''' communicate with AP server '''
-# def computeID():
 # def sendID():
 # def recvID():
 
@@ -70,6 +73,8 @@ def sendKEY():
 
 
 reqKEY()
+# for key in KEYS:
+#     print("my ID is ", computeID(bytes.fromhex(KEYS[key]), key))
 sendKEY()
 # r = requests.post("http://bugs.python.org", data={'number': 12524, 'type': 'issue', 'action': 'show'})
 # print(r.status_code, r.reason)
