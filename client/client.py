@@ -93,11 +93,9 @@ def checkID():
 # def saveID():
 
 
-# reqKEY()
-# for key in KEYS:
-#     print("my ID is ", computeID(bytes.fromhex(KEYS[key]), key))
-# sendKEY()
-print(checkID())
-# r = requests.post("http://bugs.python.org", data={'number': 12524, 'type': 'issue', 'action': 'show'})
-# print(r.status_code, r.reason)
-# print(r.text[:300] + '...')
+if __name__ == '__main__':
+    # reqKEY()
+    # for key in KEYS:
+    #     print("my ID is ", computeID(bytes.fromhex(KEYS[key]), key))
+    # sendKEY()
+    print(checkID())
