@@ -60,6 +60,14 @@ def reqKEY():
             break
 
 def sendKEY():
+    if os.path.isfile(KEY_FILE_PATH):
+        with open(KEY_FILE_PATH, 'rb') as handler:
+            KEYS = pickle.load(handler)
+    for key_ in KEYS:
+        d = key_.split('-')
+        interval = datetime.now() - datetime(int(d[0]), int(d[1]), int(d[2]))
+        if interval.days > 14:
+            del KEYS[key_]
     while True:
         r = requests.post(Server_ADDR, data=KEYS)
         if r.status_code == requests.codes.ok:
