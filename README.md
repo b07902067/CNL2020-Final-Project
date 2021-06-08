@@ -92,7 +92,7 @@
 ><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.saveID()
 - 當 client 確診時
 >client.sendKey()  
-><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.recvKey() $<img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.computeID()
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.recvKey() <img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.computeID()
 - 當 client 檢查過去 14 天是否有與確診者接觸時
 >client.checkID() 
 
