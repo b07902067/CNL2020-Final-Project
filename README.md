@@ -78,21 +78,21 @@
 ## routine
 - client 每天向 manage server 索取 key
 >client.reqKey() 
-><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.genKey()  $\rightarrow$ manage_server.sendKey() 
->$\rightarrow$ client.saveKey()
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.genKey()  <img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.sendKey() 
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.saveKey()
 - 當 client 連上某 AP 時
 >AP_server.reqID() 
->$\rightarrow$ client.sendID(client.computeID())
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.sendID(client.computeID())
 
 > AP_server.sendID() 
->$\rightarrow$ client.recvID() $\rightarrow$ client.saveID()
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.recvID() <img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.saveID()
 >
 - 當某 client 連線的 AP 有新的連上的 client 時
 >AP_server.sendID() 
->$\rightarrow$ client.saveID()
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> client.saveID()
 - 當 client 確診時
 >client.sendKey()  
->$\rightarrow$ manage_server.recvKey() $\rightarrow$ manage_server.computeID()
+><img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.recvKey() $<img src="https://render.githubusercontent.com/render/math?math=\rightarrow"> manage_server.computeID()
 - 當 client 檢查過去 14 天是否有與確診者接觸時
 >client.checkID() 
 
