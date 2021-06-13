@@ -1,5 +1,6 @@
 import socket
 from datetime import datetime
+from netifaces import interfaces, ifaddresses, AF_INET
 
 
 def getAPIP():
@@ -9,14 +10,16 @@ def getAPIP():
             return ', '.join(addresses)
 
 def sendAPIP(IP):
+	print("IP: " + IP)
 	APIP = getAPIP()
 	send_message = "AP:" + APIP
 	server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     # server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.settimeout(0.2)
-    message = str.encode(send_ID)
-    server.sendto(message, (IP, 3000))
+	server.settimeout(0.2)
+	message = str.encode(send_message)
+	server.sendto(message, (IP, 3000))
+	return
 
 
 
@@ -24,24 +27,24 @@ def sendqueue(queue, IP):
 	send_ID = "List: "
 	for i in range(len(queue)):
 		if i > 0:
-			sendID += " "
+			send_ID += " "
 		send_ID += queue[i][2]
 	server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     # server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    server.settimeout(0.2)
-    message = str.encode(send_ID)
-    server.sendto(message, (IP, 3000))
-    print("queue sent!")
-
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+	server.settimeout(0.2)
+	message = str.encode(send_ID)
+	server.sendto(message, (IP, 3000))
+	print("queue sent!")
+	return 
 
 
 
 
 def check_one_hour(dic, queue):
 	while len(queue) != 0:
-		day = queue[-1][1].split('-')
+		d = queue[-1][1].split('-')
 		interval = datetime.now() - datetime(int(d[0]), int(d[1]), int(d[2]), int(d[3]))
 		if interval.seconds < 3600: # less than one hour
 			break
@@ -49,15 +52,15 @@ def check_one_hour(dic, queue):
 			# check the IP is alive
 			# send check message
 			server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    		server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-    		# server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    		server.settimeout(0.2)
-    		message = str.encode("Here?")
-    		server.sendto(message, (queue[-1][0], 3000))
+			server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+			# server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			server.settimeout(0.2)
+			message = str.encode("Here?")
+			server.sendto(message, (queue[-1][0], 3000))
 
     		# listen to 
-    		try:
-	    		client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket. IPPROTO_UDP)
+			try:
+				client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket. IPPROTO_UDP)
 				client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
 				client.bind(("", 37020))
 				client.settimeout(10)
@@ -75,13 +78,13 @@ def check_one_hour(dic, queue):
 
 def sendID(ID):
 	server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-    # server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    server.settimeout(0.2)
-    message = str.encode(ID)
-    server.sendto(message, ('<broadcast>', 3000))
-    print("message sent!")
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+	# server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+	server.settimeout(0.2)
+	message = str.encode(ID)
+	server.sendto(message, ('<broadcast>', 3000))
+	print("message sent!")
 
 
 def reqID(dic, queue):
@@ -105,10 +108,16 @@ if __name__ == '__main__':
 	dic = {}
 	queue = []
 	while True:
+		print("I need ID and IP")
 		new_clientID, new_clientIP = reqID(dic, queue)
+		print("now the new client's ID is " + new_clientID + " and new_client's IP is " + new_clientIP)
+		print("I need to broacast ID")
 		sendID(new_clientID)
+		print("I want to check the queue")
 		check_one_hour(dic, queue)
+		print("I want to send APIP to the client")
 		sendAPIP(new_clientIP)
+		print("I want to sen queue to client")
 		sendqueue(queue, new_clientIP)
 		
 
