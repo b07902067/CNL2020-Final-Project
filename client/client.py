@@ -7,6 +7,7 @@ import os
 import hmac
 import socket
 from netifaces import interfaces, ifaddresses, AF_INET
+import secrets
 
 KEYS={}
 
@@ -117,6 +118,34 @@ def checkID():
                                 return True
     return False
 
+def gentestKEY():
+    global KEYS
+    with open(KEY_FILE_PATH, 'rb') as handler:
+        KEYS = pickle.load(handler)
+        
+    date_now = datetime.now().date().strftime("%Y-%m-%d")
+    if not date_now in KEYS:
+        KEYS[date_now] = secrets.token_bytes(8).hex()
+    with open(KEY_FILE_PATH, 'wb') as handler:
+        pickle.dump(KEYS, handler)
+
+def getKEYtoday():
+    global KEYS
+
+    ''' File Path '''
+    KEY_FILE_PATH="./KEY_FILE"
+    
+    
+    with open(KEY_FILE_PATH, 'rb') as handler:
+        KEYS = pickle.load(handler)
+        
+    date_now = datetime.now().date().strftime("%Y-%m-%d")
+    if date_now in KEYS:
+        return KEYS[date_now]
+    else :
+        print("I have no key today.")
+        return ""
+
 
 ''' communicate with AP server '''
 def sendID(ID, IP):
@@ -164,8 +193,11 @@ if __name__ == '__main__':
     # for key in KEYS:
     #     print("my ID is ", computeID(bytes.fromhex(KEYS[key]), key))
     # sendKEY()
+    gentestKEY()
+    key_today = getKEYtoday()
+    myID = computeID(bytes.fromhex(key_today), datetime.now().strftime("%Y-%m-%d-%H"))
     myIP = check_connect_to_AP()
-    myID = "1234"
+    # myID = "1234"
     sendID(myID, myIP)
     while True:
         recvID(myID)
