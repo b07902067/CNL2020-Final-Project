@@ -8,6 +8,7 @@ import hmac
 import socket
 from netifaces import interfaces, ifaddresses, AF_INET
 import secrets
+import time
 
 KEYS={}
 
@@ -160,7 +161,7 @@ def recvID(ID):
     client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     # client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     client.bind(("", 3000))
-    client.settimeout(10)
+    # client.settimeout(10)
     data, addr = client.recvfrom(1024)
     data = data.decode("utf-8")
     if data[0:6] == "List: ":
@@ -194,6 +195,7 @@ if __name__ == '__main__':
     key_today = getKEYtoday()
     myID = computeID(bytes.fromhex(key_today), datetime.now().strftime("%Y-%m-%d-%H"))
     myIP = check_connect_to_AP()
+    time.sleep(1)
     # myID = "1234"
     sendID(myID, myIP)
     while True:

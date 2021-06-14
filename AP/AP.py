@@ -19,6 +19,7 @@ def sendAPIP(IP):
 	server.settimeout(0.2)
 	message = str.encode(send_message)
 	server.sendto(message, (IP, 3000))
+	server.close()
 	return
 
 
@@ -37,6 +38,7 @@ def sendqueue(queue, IP):
 	print("sned queue message is : ", send_ID, "  to this IP : ", IP)
 	message = str.encode(send_ID)
 	server.sendto(message, (IP, 3000))
+	server.close()
 	print("queue sent!")
 	return 
 
@@ -58,6 +60,7 @@ def check_one_hour(dic, queue):
 			server.settimeout(0.2)
 			message = str.encode("Here?")
 			server.sendto(message, (queue[-1][0], 3000))
+			server.close()
 
     		# listen to 
 			try:
@@ -85,6 +88,7 @@ def sendID(ID):
 	server.settimeout(0.2)
 	message = str.encode(ID)
 	server.sendto(message, ('<broadcast>', 3000))
+	server.close()
 	print("message sent!")
 
 
