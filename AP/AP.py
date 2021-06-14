@@ -34,6 +34,7 @@ def sendqueue(queue, IP):
     # server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	server.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	server.settimeout(0.2)
+	print("sned queue message is : ", send_ID, "  to this IP : ", IP)
 	message = str.encode(send_ID)
 	server.sendto(message, (IP, 3000))
 	print("queue sent!")

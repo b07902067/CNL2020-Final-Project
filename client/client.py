@@ -15,7 +15,7 @@ KEYS={}
 KEY_FILE_PATH="./KEY_FILE"
 ID_FILE_PREFIX="./ID_FILES/"
 
-AP_IP = ""
+APIP = ""
 def writedata(data, myID):
     datas = data.split(" ")
     with open(ID_FILE_PREFIX + datetime.now().date().strftime("%Y-%m-%d"), "a") as f:
@@ -155,6 +155,7 @@ def sendID(ID, IP):
     print("message sent!") # for Debug
 
 def recvID(ID):
+    global APIP
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket. IPPROTO_UDP)
     client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     # client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -163,14 +164,15 @@ def recvID(ID):
     data, addr = client.recvfrom(1024)
     data = data.decode("utf-8")
     if data[0:6] == "List: ":
-        writedata(data[6:-1], ID)
+        writedata(data[6:], ID)
     elif data[0:3] == "AP:":
-        APIP = data[3:-1]
+        APIP = data[3:]
     elif data[0:5] == "Here?":
         server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         # server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server.settimeout(0.2)
+        message = str.encode("I'm here")
         server.sendto(message, (APIP, 37020))
     else:
 
