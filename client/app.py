@@ -1,11 +1,19 @@
 import tkinter as tk
 import client
+import sys
+
+''' Server Information'''
+Server_IP=sys.argv[1]
+Server_PORT=sys.argv[2]
+Server_ADDR="http://{}:{}".format(Server_IP, Server_PORT)
+# print(Server_ADDR)
 
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.geometry('350x600')
         self.resizable(False, False)
+        self.title("台灣社交距離")
         self._frame = None
         self.switch_frame(StartPage)
         self.grid_columnconfigure(0, weight=1)
@@ -35,17 +43,17 @@ class StartPage(tk.Frame):
         tk.Button(self, text="確診者上傳 ID", font=('', 16, "bold"),
                     command=self.send_key, height=3, width=10, fg = self.bg_color).grid(row=7, column=0, padx=10, pady=10)
     def req_key(self):
-        client.reqKEY()
+        client.reqKEY(Server_ADDR)
         self.master.switch_frame(PageOne)
     def check_ID(self):
-        contact = client.checkID()
+        contact = client.checkID(Server_ADDR)
         print(contact)
         if contact == False:
             self.master.switch_frame(PageTwo)
         else:
             self.master.switch_frame(PageThree)
     def send_key(self):
-        client.sendKEY()
+        client.sendKEY(Server_ADDR)
         self.master.switch_frame(PageFour)
 
 class PageOne(tk.Frame):

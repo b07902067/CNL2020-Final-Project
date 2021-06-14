@@ -7,6 +7,7 @@ import os
 import hmac
 import socket
 from netifaces import interfaces, ifaddresses, AF_INET
+import sys
 
 KEYS={}
 
@@ -14,11 +15,6 @@ KEYS={}
 KEY_FILE_PATH="./KEY_FILE"
 ID_FILE_PREFIX="./ID_FILES/"
 
-''' Server Information'''
-Server_IP="127.0.0.1"
-Server_PORT=8080
-Server_ADDR="http://{}:{}".format(Server_IP, str(Server_PORT))
-# print(Server_ADDR)
 AP_IP = ""
 def writedata(data, myID):
     datas = data.split(" ")
@@ -74,7 +70,7 @@ def saveKEY(date_now, key_now):
             pickle.dump(KEYS, handler)
 
 ''' communicate with management server '''
-def reqKEY():
+def reqKEY(Server_ADDR):
     while True:
         r = requests.get(Server_ADDR+"/getkey")
         if r.status_code == requests.codes.ok:
@@ -84,7 +80,7 @@ def reqKEY():
             saveKEY(date_now, key_now)
             break
 
-def sendKEY():
+def sendKEY(Server_ADDR):
     if os.path.isfile(KEY_FILE_PATH):
         with open(KEY_FILE_PATH, 'rb') as handler:
             KEYS = pickle.load(handler)
@@ -99,7 +95,7 @@ def sendKEY():
             print(r.text)
             break
 
-def checkID():
+def checkID(Server_ADDR):
     for i in os.listdir(ID_FILE_PREFIX):
         r = requests.get(Server_ADDR+"/checkid/"+i)
         print("pre")
