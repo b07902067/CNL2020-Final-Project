@@ -108,16 +108,16 @@ if __name__ == '__main__':
 	dic = {}
 	queue = []
 	while True:
-		print("I need ID and IP")
+		# print("I need ID and IP")
 		new_clientID, new_clientIP = reqID(dic, queue)
-		print("now the new client's ID is " + new_clientID + " and new_client's IP is " + new_clientIP)
-		print("I need to broacast ID")
+		# print("now the new client's ID is " + new_clientID + " and new_client's IP is " + new_clientIP)
+		# print("I need to broacast ID")
 		sendID(new_clientID)
-		print("I want to check the queue")
+		# print("I want to check the queue")
 		check_one_hour(dic, queue)
-		print("I want to send APIP to the client")
+		# print("I want to send APIP to the client")
 		sendAPIP(new_clientIP)
-		print("I want to sen queue to client")
+		# print("I want to sen queue to client")
 		sendqueue(queue, new_clientIP)
 		
 
