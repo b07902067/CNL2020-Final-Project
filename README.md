@@ -1,7 +1,8 @@
 # AP 在接觸史中的應用
+<img src="https://user-images.githubusercontent.com/64156567/133882364-b03718fa-7aa8-4653-9140-0c46706ebaf2.png" alt="Cover" width="20%"/>
 
 ### Usage
-- 詳見 [demo連結](https://www.youtube.com/watch?v=EYR9DQhYl_4)
+- 詳見 [demo影片連結](https://www.youtube.com/watch?v=EYR9DQhYl_4)
 
 ### 目的
 將『和確診者在相近時段內，連接過同一AP者』定義為接觸者。
@@ -18,3 +19,6 @@
 ### 實作
 - 使用每人每日每小時皆不同的 ID 作為用戶身份的識別方式
 - 詳見 [report](https://github.com/b07902067/CNL2020-Final-Project/blob/main/report.pdf)
+
+### 參考
+[台灣社交距離app](https://www.cdc.gov.tw/Category/Page/R8bAd_yiVi22CIr73qM2yw)
